@@ -1,0 +1,143 @@
+{
+  "active": false,
+  "connections": {
+    "Evaluate Health Rules": {
+      "main": [
+        [
+          {
+            "node": "Send to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Jira Backlog": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Health Rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Jira Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scheduled Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Jira Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-16T01:37:35.824Z",
+  "id": "sJChyQ37Flvh4ePc",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "eeecaf8d-7a70-4bf9-8fcc-33f53d6115c7",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        220,
+        20
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "97c6f2d2-3639-4740-ae56-04d98f13dec1",
+      "name": "Scheduled Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        220,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "options": {}
+      },
+      "id": "85b56d87-2bad-4943-8149-21c077469ac3",
+      "name": "Fetch Jira Backlog",
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        460,
+        100
+      ],
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "pm0RLWQuwcjAbLUx",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;\nconst now = new Date();\n\nconst results = [];\n\nfor (const item of items) {\n  const issue = item.json;\n  const created = new Date(issue.fields.created);\n  const age = now - created;\n\n  const hasNoAssignee = !issue.fields.assignee;\n  const isOld = age > THIRTY_DAYS_MS;\n  const noStoryPoints = issue.fields.customfield_10016 == null;\n\n  if (hasNoAssignee || isOld || noStoryPoints) {\n    results.push({\n      json: {\n        key: issue.key,\n        summary: issue.fields.summary,\n        ageDays: Math.floor(age / (1000 * 60 * 60 * 24)),\n        assignee: issue.fields.assignee?.displayName || 'Unassigned',\n        storyPoints: issue.fields.customfield_10016 || 'None'\n      }\n    });\n  }\n}\n\nreturn results;\n"
+      },
+      "id": "3c4e4a93-ffec-44a9-aa8f-0e27a9d06f3d",
+      "name": "Evaluate Health Rules",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        680,
+        100
+      ],
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "otherOptions": {},
+        "attachments": []
+      },
+      "id": "d73fb7d0-99d9-4c91-bb3f-8f8304082683",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        940,
+        100
+      ]
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "dinhdobathi1992",
+    "name": "n8n-workflow"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-19T05:49:55.914Z",
+  "versionId": "ab0daa57-a0c5-4aed-acd0-c50ebc45cdff"
+}
