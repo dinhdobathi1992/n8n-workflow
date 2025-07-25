@@ -1,0 +1,710 @@
+{
+  "active": false,
+  "connections": {
+    "Get New Zendesk Tickets": {
+      "main": [
+        [
+          {
+            "node": "Get a ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message an assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send Reply to Ticket2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Reply to Ticket2": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Message an assistant",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zendesk Trigger": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Get New Zendesk Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get New Zendesk Tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a ticket": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message an assistant": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-17T08:05:00.197Z",
+  "id": "V1F4tRZnzf9rUOlw",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zendesk",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "status": "open"
+        }
+      },
+      "id": "02e43866-3a1e-434d-a697-7ae04f24d8e4",
+      "name": "Get New Zendesk Tickets",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [
+        -1960,
+        120
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "zendeskApi": {
+          "id": "WGOdCzDa6aHp5grv",
+          "name": "Zendesk account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab02f547-fc2c-4fdb-86c3-a6b2f7e33336",
+              "name": "subject",
+              "value": "={{ $json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "4be1ca82-9594-4926-8e62-a397783420f7",
+              "name": "description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            },
+            {
+              "id": "2035fe07-5033-4a36-bbba-b45bd9eeb6da",
+              "name": "via.channel",
+              "value": "={{ $json.via.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "1f6d0dc5-9b84-416f-8f2a-d10cd67cb52b",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "75d71a70-ee2a-40bd-bbfb-fc15e7d7706c",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1620,
+        120
+      ],
+      "id": "2ad0597b-7567-49c6-a704-8a5d63e1ea16",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "id": "={{ $('Loop Over Items').item.json.id }}",
+        "updateFields": {
+          "assigneeEmail": "thi@decubate.com",
+          "publicReply": "={{ $('Message an assistant').item.json.output }}",
+          "status": "pending"
+        }
+      },
+      "id": "ae3dd115-e71f-40d6-a78a-dfb5b8a70b56",
+      "name": "Send Reply to Ticket2",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        -120
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "zendeskApi": {
+          "id": "WGOdCzDa6aHp5grv",
+          "name": "Zendesk account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1400,
+        120
+      ],
+      "id": "7cc9d023-6514-4534-b096-5d4ec3e66a61",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "06360868-5dce-4538-b8de-a050050b02ec",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -280,
+        120
+      ],
+      "id": "2e42ac16-7f4b-4a7d-a397-7e1d6cbccf9e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## Trained OpenAI Assistant\n- Documentation\n- Knowledge base articles\n- Manual input\n- Example replies",
+        "height": 300,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1640,
+        -40
+      ],
+      "id": "10e77564-a2b9-4aee-8c00-2511cc1a6a56",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Approval & Review flow\nCurrently, each support ticket will be reviewed by the assistant, and an example reply is sent via Slack that can be approved or declined as a reply. Once approved, it will be emailed to the user.",
+        "height": 300,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1140,
+        -40
+      ],
+      "id": "430f85ec-a8e7-47c8-81b3-a8617803beee",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Fetch all new tickets\nThe Zendesk node fetches all new tickets and filters the data so only relevant data is passed to the assistant through a loop so each ticket is considered as a unique 'issue' that need to be answered.",
+        "height": 300,
+        "width": 420
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2240,
+        -40
+      ],
+      "id": "5dcc41d4-60c9-4ea2-b676-36ca74c7984d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=zendesk"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -940,
+        420
+      ],
+      "id": "344a1218-18d5-4a44-8aad-1294328f863f",
+      "name": "Window Buffer Memory"
+    },
+    {
+      "parameters": {
+        "options": {
+          "fields": [
+            "ticket.status"
+          ]
+        },
+        "conditions": {
+          "any": [
+            {
+              "value": "new"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.zendeskTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2400,
+        340
+      ],
+      "id": "e62540b5-922e-4dbb-8ab7-b36695b43b23",
+      "name": "Zendesk Trigger",
+      "webhookId": "82635ef9-06bd-447f-9bbc-169d7e6f1232",
+      "credentials": {
+        "zendeskApi": {
+          "id": "WGOdCzDa6aHp5grv",
+          "name": "Zendesk account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "beee4cd0-d87c-4d22-ab11-0603fe877542",
+              "leftValue": "={{ $json[\"ticket.status\"] }}",
+              "rightValue": "New",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2180,
+        340
+      ],
+      "id": "24fe14cf-40fd-4aae-a5c0-87570ac87816",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C091T5GBE3D",
+          "mode": "list",
+          "cachedResultName": "zendesk-agent"
+        },
+        "text": "=There has been an update in Zendesk, there is an error though, there was not a single ticket with the status `new`",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        -1960,
+        360
+      ],
+      "id": "a6cc049c-b448-4cd8-8f8f-9ff23be2ca07",
+      "name": "Slack3",
+      "webhookId": "fb27bb39-b9ce-4ceb-a063-c012ca5404aa",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Store data\nStore answers and data to a database that we can use to train the assistant.",
+        "height": 300,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        -40
+      ],
+      "id": "e19bdc8a-9986-4412-babc-6e9f2043c64b",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Decision making and messaging \nCheck whether the message is approved or declined and update the ticket and inform the agent.",
+        "height": 540,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -280
+      ],
+      "id": "f18847af-97fc-45f3-8380-369ecd0d3a93",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2180,
+        120
+      ],
+      "id": "e355cd12-53c8-43fe-8cc5-ba83668a4e8e",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "id": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [
+        -1780,
+        120
+      ],
+      "id": "47364697-c70a-45da-a423-0eb71619a1c6",
+      "name": "Get a ticket",
+      "credentials": {
+        "zendeskApi": {
+          "id": "WGOdCzDa6aHp5grv",
+          "name": "Zendesk account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_I6t6J3BHm5wDd7FuD5PYZhbK",
+          "mode": "list",
+          "cachedResultName": "asst_I6t6J3BHm5wDd7FuD5PYZhbK"
+        },
+        "prompt": "define",
+        "text": "=Subject: {{ $('Loop Over Items').item.json.subject }}\nMessage: {{ $('Loop Over Items').item.json.description }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -1100,
+        120
+      ],
+      "id": "731fab9c-9b29-4b43-bd0c-8c3c7759806b",
+      "name": "Message an assistant",
+      "credentials": {
+        "openAiApi": {
+          "id": "aqCbl1096qSAicpE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "sendAndWait",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0967437HPT",
+          "mode": "list",
+          "cachedResultName": "zendesk-agent"
+        },
+        "message": "=*Ticket status:* {{ $('Loop Over Items').item.json.status }}\n*Ticket link:* https://decubatecom.zendesk.com/agent/tickets/{{ $('Loop Over Items').item.json.id }}\n\n*This was the original question:* {{ $('Edit Fields').item.json.description }}\n\n*Would you be happy with this response*: {{ $('Message an assistant').item.json.output }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        -460,
+        120
+      ],
+      "id": "72404bfb-39d7-4025-9dab-f7c44c6bb926",
+      "name": "Send message and wait for response",
+      "webhookId": "2f3ae991-38db-4e35-8f61-54f206fead67",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Ipe85whzL4FbgvrT",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C091T5GBE3D",
+          "mode": "list",
+          "cachedResultName": "zendesk-agent"
+        },
+        "text": "=You have declined the response. You can send a custom reply via https://decubatecom.zendesk.com/agent/tickets/{{ $('Get New Zendesk Tickets').item.json.id }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        -100,
+        80
+      ],
+      "id": "077cd5ad-7cf7-47e7-bb4f-375f84bcfbbd",
+      "name": "Send a message1",
+      "webhookId": "fb27bb39-b9ce-4ceb-a063-c012ca5404aa",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Ipe85whzL4FbgvrT",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0967437HPT",
+          "mode": "list",
+          "cachedResultName": "zendesk-agent"
+        },
+        "text": "=I have received your approval. I have update ticket {{ $json.id }} and sent a reply via email.",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        100,
+        -120
+      ],
+      "id": "6e65b267-61e6-4fdc-8ffe-2e45ecced303",
+      "name": "Send a message2",
+      "webhookId": "fb27bb39-b9ce-4ceb-a063-c012ca5404aa",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Ipe85whzL4FbgvrT",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "23155597-9761-80f1-89b8-cafb203b9990",
+          "mode": "list",
+          "cachedResultName": "Zendesk",
+          "cachedResultUrl": "https://www.notion.so/23155597976180f189b8cafb203b9990"
+        },
+        "title": "=Ticket {{ $('Loop Over Items').item.json.id }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Question|title",
+              "title": "={{ $('Loop Over Items').item.json.subject }}"
+            },
+            {
+              "key": "Answer|rich_text",
+              "richText": "={{ false }}",
+              "textContent": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        -660,
+        120
+      ],
+      "id": "6ff94bab-9b7f-4014-aca4-062443a22bae",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "H2lhQCLz2ebVFcMD",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "dinhdobathi1992",
+    "name": "n8n-workflow"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-17T08:41:37.956Z",
+  "versionId": "e7e45d67-dbe0-4750-a579-0bb7c53ce65a"
+}
